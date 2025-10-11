@@ -1,16 +1,49 @@
-# React + Vite
+Project Decisions Overview: The useFetch Custom Hook
+This project successfully implements the useFetch custom hook and integrates it into a modern React application, adhering to principles of separation of concerns, robust error handling, and user experience.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+1. Structural and Organization Decisions
+Decision
 
-Currently, two official plugins are available:
+Justification
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Custom Hook Isolation (src/hooks/useFetch.js)
 
-## React Compiler
+Separated the reusable data fetching logic (state, useEffect) into a dedicated hooks/ directory. This makes the hook highly reusable and keeps presentation logic clean.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Component Isolation (src/components/DataFetcher.jsx)
 
-## Expanding the ESLint configuration
+The component responsible for using the hook and displaying the data was isolated. This separation makes the component focused on UI rendering and state consumption.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Vite/Tailwind Setup
+
+Utilized a modern setup for rapid development and clean, responsive styling without writing custom CSS, focusing development time on React logic.
+
+2. Implementation and Hook Robustness
+Decision
+
+Justification
+
+Dependency Array ([url]) in useEffect
+
+The effect logic runs only when the url parameter changes. This is critical for efficiency, preventing unnecessary re-fetches and ensuring the component reacts dynamically when the source changes (as demonstrated with the test buttons).
+
+Comprehensive Return Values
+
+The hook returns data, loading, and error. This provides the consuming component (DataFetcher) with all necessary states to handle the UI conditionally.
+
+Error Handling Test Implementation
+
+Added functional buttons in DataFetcher.jsx to toggle between a valid and an intentionally invalid API endpoint. This confirmed that the useFetch hook correctly catches HTTP errors (response.ok) and network/parsing errors (try...catch) and surfaces them to the user.
+
+3. User Experience (UX) Enhancements
+Decision
+
+Justification
+
+Two-Phase Loading
+
+Implemented an initial "Initializing Application" screen (App.jsx) to simulate application setup, followed by a "Loading Product Data" spinner (DataFetcher.jsx) during the API call. This provides clear feedback to the user on what stage the application is in.
+
+Responsive and Clear UI
+
+Used Tailwind CSS to ensure the layout is fully responsive on mobile and desktop, with clear visual cues for success (product cards), loading (blue spinner), and error states (red alert box).
