@@ -1,49 +1,45 @@
-Project Decisions Overview: The useFetch Custom Hook
-This project successfully implements the useFetch custom hook and integrates it into a modern React application, adhering to principles of separation of concerns, robust error handling, and user experience.
+React Custom Hooks (useFetch)
+This project implements a reusable custom React hook named useFetch to simplify asynchronous data fetching, centralize state management (data, loading, error), and enhance component readability.
 
-1. Structural and Organization Decisions
-Decision
+Deployment Link
 
-Justification
+Netlify Deploy
+https://68e9fc7a63ad65076b3ca17a--magnificent-pie-24374a.netlify.app/
 
-Custom Hook Isolation (src/hooks/useFetch.js)
+GitHub Repository
+https://github.com/Sharon-Daniel/REACT.git
 
-Separated the reusable data fetching logic (state, useEffect) into a dedicated hooks/ directory. This makes the hook highly reusable and keeps presentation logic clean.
 
-Component Isolation (src/components/DataFetcher.jsx)
+Project Overview and Features
 
-The component responsible for using the hook and displaying the data was isolated. This separation makes the component focused on UI rendering and state consumption.
+This application showcases robust data handling by separating concerns:
+Custom Hook (useFetch.js): Encapsulates useState and useEffect to manage and expose the full lifecycle of an API call (loading, success, error) based on a dynamic URL dependency.
+Two-Phase Loading:
+Phase 1 (App.jsx): Simulates initial application setup with an "Initializing Application" screen.
+Phase 2 (DataFetcher.jsx): Displays a dedicated "Loading Product Data" spinner during the network request.
+Error Handling Test: Includes a feature to switch the API endpoint to an intentionally invalid URL, proving that the hook correctly catches and reports network and HTTP errors to the consuming component.
+Usage of useFetch
 
-Vite/Tailwind Setup
+import useFetch from './hooks/useFetch';
 
-Utilized a modern setup for rapid development and clean, responsive styling without writing custom CSS, focusing development time on React logic.
+const MyComponent = () => {
+  const { data, loading, error } = useFetch('your-api-url');
 
-2. Implementation and Hook Robustness
-Decision
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+  
+  
+  return <div>{JSON.stringify(data)}</div>;
+};
 
-Justification
 
-Dependency Array ([url]) in useEffect
+Setup and Installation
+Clone the repository:
+git clone https://github.com/Sharon-Daniel/REACT.git
+cd my-fetch-hook-app
 
-The effect logic runs only when the url parameter changes. This is critical for efficiency, preventing unnecessary re-fetches and ensuring the component reacts dynamically when the source changes (as demonstrated with the test buttons).
+Install dependencies:
+npm install
 
-Comprehensive Return Values
-
-The hook returns data, loading, and error. This provides the consuming component (DataFetcher) with all necessary states to handle the UI conditionally.
-
-Error Handling Test Implementation
-
-Added functional buttons in DataFetcher.jsx to toggle between a valid and an intentionally invalid API endpoint. This confirmed that the useFetch hook correctly catches HTTP errors (response.ok) and network/parsing errors (try...catch) and surfaces them to the user.
-
-3. User Experience (UX) Enhancements
-Decision
-
-Justification
-
-Two-Phase Loading
-
-Implemented an initial "Initializing Application" screen (App.jsx) to simulate application setup, followed by a "Loading Product Data" spinner (DataFetcher.jsx) during the API call. This provides clear feedback to the user on what stage the application is in.
-
-Responsive and Clear UI
-
-Used Tailwind CSS to ensure the layout is fully responsive on mobile and desktop, with clear visual cues for success (product cards), loading (blue spinner), and error states (red alert box).
+Start the development server:
+npm run dev
